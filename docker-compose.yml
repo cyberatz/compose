@@ -2,6 +2,7 @@ services:
   traefik:
     image: "traefik"
     restart: always
+    container_name: gitops-traefik
     command:
       - "--api.insecure=true"
       - "--providers.docker=true"
@@ -22,6 +23,7 @@ services:
   
   n8n:
     image: docker.n8n.io/n8nio/n8n
+    container_name: gitops-n8n
     restart: always
     ports:
       - "127.0.0.1:5678:5678"
@@ -53,7 +55,7 @@ services:
   tailscale-nginx:
     image: tailscale/tailscale:latest
     hostname: tailscale-nginx
-    container_name: ts-nginx
+    container_name: gitops-ts-nginx
     privileged: true
     environment:
 
@@ -76,7 +78,7 @@ services:
     restart: unless-stopped
   nginx:
     image: nginx
-    container_name: ts-nginx-support
+    container_name: gitops-ts-nginx-support
     depends_on:
       - tailscale-nginx
     network_mode: service:tailscale-nginx
