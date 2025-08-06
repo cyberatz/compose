@@ -20,7 +20,6 @@ services:
     volumes:
       - traefik_data:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock:ro
-  
   n8n:
     image: docker.n8n.io/n8nio/n8n
     container_name: gitops-n8n
@@ -49,6 +48,7 @@ services:
       - NODE_ENV=production
       - WEBHOOK_URL=https://${SUBDOMAIN}.${DOMAIN_NAME}/
       - GENERIC_TIMEZONE=${GENERIC_TIMEZONE}
+      - TZ=Europe/Berlin
     volumes:
       - n8n_data:/home/node/.n8n
       - ./local-files:/files
@@ -58,7 +58,7 @@ services:
     container_name: gitops-ts-nginx
     privileged: true
     environment:
-
+      - TZ=Europe/Berlin
       - TS_AUTHKEY=tskey-auth-k4QbV53H9K11CNTRL-N4XDudkmruXUfw5mGzXTuXmJM9LxR1nBD
       #- TS_EXTRA_ARGS=--advertise-tags=tag:container
       - TS_EXTRA_ARGS=--advertise-exit-node
@@ -83,7 +83,6 @@ services:
       - tailscale-nginx
     network_mode: service:tailscale-nginx
     restart: unless-stopped
-
 volumes:
   n8n_data:
   traefik_data:
