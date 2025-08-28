@@ -84,7 +84,7 @@ services:
     network_mode: service:tailscale-nginx
     restart: unless-stopped
   watchtower:
-    container_name: thewatchtower
+    container_name: gitops-watchtower
     image: containrrr/watchtower:latest
     mem_limit: 256m
     environment:
