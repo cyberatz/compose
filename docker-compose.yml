@@ -83,6 +83,21 @@ services:
       - tailscale-nginx
     network_mode: service:tailscale-nginx
     restart: unless-stopped
+  watchtower:
+    container_name: thewatchtower
+    image: containrrr/watchtower:latest
+    mem_limit: 256m
+    environment:
+      - WATCHTOWER_POLL_INTERVAL=3600
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_ROLLING_RESTART=true
+      - WATCHTOWER_INCLUDE_RESTARTING=true
+      - WATCHTOWER_INCLUDE_STOPPED=true
+      - WATCHTOWER_REVIVE_STOPPED=false
+      - TZ=Europe/Zurich
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
 volumes:
   n8n_data:
   traefik_data:
