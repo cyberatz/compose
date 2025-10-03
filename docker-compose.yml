@@ -98,6 +98,28 @@ services:
     restart: always
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+  hvss:
+    container_name: gitops-hvss
+    image: ewproductsecurity/hvss-calculator-service:latest
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.hvss.rule=Host(`${SUBDOMAIN}.${DOMAIN_NAME}`)
+      - traefik.http.routers.hvss.tls=true
+      - traefik.http.routers.hvss.entrypoints=web,websecure
+      - traefik.http.routers.hvss.tls.certresolver=mytlschallenge
+      - traefik.http.middlewares.hvss.headers.SSLRedirect=true
+      - traefik.http.middlewares.hvss.headers.STSSeconds=315360000
+      - traefik.http.middlewares.hvss.headers.browserXSSFilter=true
+      - traefik.http.middlewares.hvss.headers.contentTypeNosniff=true
+      - traefik.http.middlewares.hvss.headers.forceSTSHeader=true
+      - traefik.http.middlewares.hvss.headers.SSLHost=${DOMAIN_NAME}
+      - traefik.http.middlewares.hvss.headers.STSIncludeSubdomains=true
+      - traefik.http.middlewares.hvss.headers.STSPreload=true
+      - traefik.http.routers.hvss.middlewares=hvss@docker
+    mem_limit: 64m
+    ports:
+      - "127.0.0.1:8088:8088"
+    restart: always
 volumes:
   n8n_data:
   traefik_data:
