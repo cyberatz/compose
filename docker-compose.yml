@@ -1,6 +1,6 @@
 services:
   homeassistant:
-    container_name: homeassistant
+    container_name: gitops-homeassistant
     image: "ghcr.io/home-assistant/home-assistant:latest"
     volumes:
       - /data/hass:/config
