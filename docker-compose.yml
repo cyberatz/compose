@@ -9,6 +9,8 @@ services:
     restart: unless-stopped
     privileged: true
     network_mode: host
+    ports: 
+      - 8123:8123
     environment:
       TZ: Europe/Zurich
   traefik:
