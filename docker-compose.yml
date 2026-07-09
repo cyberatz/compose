@@ -137,6 +137,7 @@ services:
       - "127.0.0.1:8088:8088"
     restart: always
   signal-cli-rest-api:
+    container_name: gitops-signal-cli
     image: bbernhard/signal-cli-rest-api:latest
     environment:
       - MODE=normal #supported modes: json-rpc, native, normal
