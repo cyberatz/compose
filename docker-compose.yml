@@ -13,6 +13,19 @@ services:
       - 8123:8123
     environment:
       TZ: Europe/Zurich
+  matter-server:
+    image: ghcr.io/home-assistant-libs/python-matter-server:stable
+    container_name: matter-server
+    restart: unless-stopped
+    network_mode: host
+    privileged: true
+    security_opt:
+      - apparmor:unconfined
+    volumes:
+      - /data/hass/matter-data:/data/
+      - /run/dbus:/run/dbus:ro
+      - /etc/localtime:/etc/localtime:ro
+      #- /dev/hci0
   traefik:
     image: "traefik"
     restart: always
