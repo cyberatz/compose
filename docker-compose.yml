@@ -15,7 +15,7 @@ services:
       TZ: Europe/Zurich
   matter-server:
     image: ghcr.io/home-assistant-libs/python-matter-server:stable
-    container_name: matter-server
+    container_name: gitops-matter-server
     restart: unless-stopped
     network_mode: host
     privileged: true
