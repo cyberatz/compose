@@ -261,8 +261,22 @@ services:
   #          ipv6_address: '2a05:41c0:100:2800::32'
   #      default:
 
+  autoheal:
+    container_name: gitops-autoheal
+    restart: always
+    image: willfarrell/autoheal:latest
+    environment:
+      - AUTOHEAL_CONTAINER_LABEL=all
+      - AUTOHEAL_INTERVAL=5   # check every 5 seconds
+      - AUTOHEAL_START_PERIOD=5 # wait 0 seconds before first health check
+      - AUTOHEAL_DEFAULT_STOP_TIMEOUT=10   # Docker waits max 10 seconds (the Docker default) for a container to stop before killing during restarts (container overridable via label, see below)
+      - DOCKER_SOCK=/var/run/docker.sock   # Unix socket for curl requests to Docker API
+      - CURL_TIMEOUT=30 # --max-time seconds for curl requests to Docker API
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  
   hass-configurator:
-    container_name: hass-configurator
+    container_name: gitops-hass-configurator
     image: "causticlab/hass-configurator-docker:x86_64"
     environment:
       - TZ=Europe/Zurich
