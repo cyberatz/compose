@@ -160,7 +160,124 @@ services:
     volumes:
       #- "./signal-cli-config:/home/.local/share/signal-cli" #map "signal-cli-config" folder on host system into docker container. the folder contains the password and cryptographic keys when a new number is registered
       - signal_data:/home/.local/share/signal-cli
+  #knxd:
+  #  image: ghcr.io/cyberatz/knxd:amd64
+  #  container_name: knxd
+  #  privileged: true
+  #  environment:
+  #    - TZ=Europe/Zurich
+  #  #ports:
+  #  #  - "3672:3672/udp"
+  #  #  - "6720:6720/tcp"
+  #  #network_mode: "host"
+  #  #networks:
+  #  #    #default:
+  #  #    lan:
+  #  #      ipv4_address: 10.0.0.33
+  #  #      ipv6_address: '2001:1a88:195:7900::33'
+  #  network_mode: "service:homeassistant"
+  #  #entrypoint: ["tail", "-f", "/dev/null"]
+  #  restart: unless-stopped
+  #  volumes:
+  #    - /data/ha/knxd:/etc/knxd
+  #  healthcheck:
+  #    test: "/home/docker-healthcheck"
+  #    interval: 60s
+  #    retries: 200
+
+  #postgres:
+  #  container_name: postgres 
+  #  image: postgres:13
+  #  restart: always
+  #  mem_limit: 256m
+  #  environment:
+  #    - TZ=Europe/Zurich
+  #    - POSTGRES_PASSWORD=p@ssw0rd1234567890
+  #    - PGDATA=/var/lib/postgresql/data/pgdata
+  #  volumes:
+  #    - /data/ha/postgres/postgres.conf:/etc/postgresql/postgresql.conf
+  #    - /data/ha/postgres/data:/var/lib/postgresql/data
+  #  #network_mode: "service:homeassistant"
+  #  #ports:
+  #  #  - 5432:5432
+
+  #pg-adminer:
+  #  container_name: adminer
+  #  image: adminer:latest
+  #  restart: always
+  #  #mem_limit: 256m
+  #  #network_mode: "service:homeassistant"
+  #  ports:
+  #    - 8090:8080
+    
+  #mqtt:
+  #   image: eclipse-mosquitto:latest
+  #   container_name: mqtt
+  #   mem_limit: 64m
+  #   #network_mode: "service:homeassistant"
+  #   ports:
+  #     - "1883:1883/tcp"
+  #     - "9001:9001/tcp"
+  #   restart: always
+  #   volumes:
+  #     - /data/ha/mosquitto/config/mosquitto.conf:/mosquitto/config/mosquitto.conf 
+  #     - /data/ha/mosquitto/data:/mosquitto/data 
+  #     - /data/ha/mosquitto/log:/mosquitto/log 
+
+  #knxweather:
+  #  container_name: knxweather
+  #  image: andrevs/online_knx_weatherstation:latest
+  #  restart: always
+  #  mem_limit: 64m
+  #  environment:
+  #    TZ: Europe/Zurich
+
+  #homeassistant:
+  #  container_name: home-assistant
+  #  image: homeassistant/home-assistant:stable
+  #  #mem_limit: 1024m
+  #  volumes:
+  #    - /data/ha/homeassistant:/config
+  #  environment:
+  #    - TZ=Europe/Zurich
+  #  restart: always
+  #  extra_hosts:
+  #  #  - "postgres:127.0.0.1"
+  #  #  - "mqtt:127.0.0.1"
+  #    - "knxd:127.0.0.1"
+      
+  #  #network_mode: host
+  #  networks:
+  #      lan:
+  #          ipv4_address: 10.0.0.32
+  #          ipv6_address: '2a05:41c0:100:2800::32'
+  #      default:
+
+  hass-configurator:
+    container_name: hass-configurator
+    image: "causticlab/hass-configurator-docker:x86_64"
+    environment:
+      - TZ=Europe/Zurich
+    restart: always
+    #network_mode: "service:homeassistant"
+    ports:
+      - "3218:3218/tcp"
+    mem_limit: 64m
+    volumes:
+      - /data/hass/homeassistant-configurator:/config
+      - /data/hass:/hass-config
+
+
+
 volumes:
   n8n_data:
   traefik_data:
   signal_data:
+
+
+#networks:
+#  lan:
+#    external:
+#      name: lan
+#  default:
+#    driver: bridge
