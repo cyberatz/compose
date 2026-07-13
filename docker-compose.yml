@@ -13,6 +13,7 @@ services:
       - 8123:8123
     environment:
       TZ: Europe/Zurich
+  
   matter-server:
     image: ghcr.io/home-assistant-libs/python-matter-server:stable
     container_name: gitops-matter-server
@@ -26,6 +27,7 @@ services:
       - /run/dbus:/run/dbus:ro
       - /etc/localtime:/etc/localtime:ro
       #- /dev/hci0
+  
   traefik:
     image: "traefik"
     restart: always
@@ -47,6 +49,7 @@ services:
     volumes:
       - traefik_data:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock:ro
+  
   n8n:
     image: docker.n8n.io/n8nio/n8n:latest
     container_name: gitops-n8n
@@ -80,6 +83,7 @@ services:
     volumes:
       - n8n_data:/home/node/.n8n
       - ./local-files:/files
+  
   tailscale-nginx:
     image: tailscale/tailscale:latest
     hostname: tailscale-nginx
@@ -104,6 +108,7 @@ services:
       - net_admin
       - sys_module
     restart: unless-stopped
+  
   nginx:
     image: nginx:latest
     container_name: gitops-ts-nginx-support
@@ -111,6 +116,7 @@ services:
       - tailscale-nginx
     network_mode: service:tailscale-nginx
     restart: unless-stopped
+  
   watchtower:
     container_name: gitops-watchtower
     image: containrrr/watchtower:latest
@@ -126,6 +132,7 @@ services:
     restart: always
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+  
   hvss:
     container_name: gitops-hvss
     image: ewproductsecurity/hvss-calculator-service:latest
@@ -149,6 +156,7 @@ services:
     ports:
       - "127.0.0.1:8088:8088"
     restart: always
+  
   signal-cli-rest-api:
     container_name: gitops-signal-cli
     image: bbernhard/signal-cli-rest-api:latest
